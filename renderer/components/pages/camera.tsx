@@ -1,12 +1,52 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
+import { useRecording } from "../../hooks/record";
 
 export const Camera: React.FC = () => {
+  const {
+    startRecording,
+    stopRecording,
+    isRecording,
+    recordedDataSrc,
+    videoRef,
+  } = useRecording();
   return (
     <Box>
       <Typography>カメラ</Typography>
-      <Box sx={{ backgroundColor: "red" }}>
-        <video src="" width="320px" height="320px"></video>
+      <Button
+        variant="contained"
+        onClick={startRecording}
+        disabled={isRecording}
+      >
+        Start
+      </Button>
+      <Button
+        variant="contained"
+        onClick={stopRecording}
+        disabled={!isRecording}
+      >
+        Stop
+      </Button>
+
+      <Box
+        ref={videoRef}
+        component="video"
+        autoPlay
+        muted
+        width="320px"
+        height="320px"
+        sx={{ backgroundColor: "red", textAlign: "center" }}
+      />
+      <Box sx={{ backgroundColor: "blue", textAlign: "center" }}>
+        <video
+          width="320px"
+          height="320px"
+          src={recordedDataSrc}
+          controls
+          playsInline
+        ></video>
       </Box>
+
+      <Button variant="contained">ダウンロード</Button>
     </Box>
   );
 };
