@@ -2,6 +2,9 @@ import { Box, Typography, Button, IconButton } from "@mui/material";
 import { PlayCircleFilledWhite, StopCircle } from "@mui/icons-material";
 import { useRecording } from "../../hooks/record";
 import { theme } from "../../theme";
+import Image from "next/image";
+import movementImage from "../../../build/move.png";
+import uplightImage from "../../../build/uplight.png";
 
 export const Camera: React.FC = () => {
   const {
@@ -35,9 +38,20 @@ export const Camera: React.FC = () => {
             </Box>
           )}
           {isRecording && (
-            <IconButton onClick={stopRecording}>
-              <StopCircle sx={{ fontSize: "256px" }} />
-            </IconButton>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <Image src={movementImage.src} width={240} height={240} alt="" />
+              <Image src={uplightImage.src} width={160} height={240} alt="" />
+              <IconButton onClick={stopRecording}>
+                <StopCircle sx={{ fontSize: "128px" }} />
+              </IconButton>
+            </Box>
           )}
         </Box>
         <Box ref={videoRef} component="video" autoPlay muted width="50vw" />
