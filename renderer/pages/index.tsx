@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import Link from "next/link";
-import Layout from "../components/Layout";
 import { Camera } from "../components/pages/camera";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "../theme";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const IndexPage = () => {
   useEffect(() => {
@@ -21,7 +22,10 @@ const IndexPage = () => {
 
   return (
     <>
-      <Camera />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Camera />
+      </ThemeProvider>
     </>
   );
 };
