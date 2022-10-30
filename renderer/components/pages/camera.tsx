@@ -1,4 +1,5 @@
 import { Box, Typography, Button, IconButton } from "@mui/material";
+import { PlayCircleFilledWhite, StopCircle } from "@mui/icons-material";
 import { useRecording } from "../../hooks/record";
 import { theme } from "../../theme";
 
@@ -14,49 +15,32 @@ export const Camera: React.FC = () => {
     <Box sx={{ p: theme.spacing(4) }}>
       <Typography variant="h4">ExperimentTimer</Typography>
 
-      <Box sx={{ display: "flex", p: theme.spacing(2) }}>
+      <Box sx={{ display: "flex", px: theme.spacing(2), height: "80vh" }}>
         <Box
           sx={{
             width: "50vw",
-            height: "50vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
           {!isRecording && (
-            <IconButton
-              onClick={startRecording}
-              sx={{
-                width: "128px",
-                height: "128px",
-                backgroundColor: theme.palette.primary.main,
-              }}
-            >
-              Start
-            </IconButton>
+            <Box>
+              <Typography variant="h4" textAlign="center">
+                Start
+              </Typography>
+              <IconButton onClick={startRecording} color="primary">
+                <PlayCircleFilledWhite sx={{ fontSize: "256px" }} />
+              </IconButton>
+            </Box>
           )}
           {isRecording && (
-            <IconButton
-              onClick={stopRecording}
-              sx={{
-                width: "128px",
-                height: "128px",
-                backgroundColor: theme.palette.primary.main,
-              }}
-            >
-              Stop
+            <IconButton onClick={stopRecording}>
+              <StopCircle sx={{ fontSize: "256px" }} />
             </IconButton>
           )}
         </Box>
-        <Box
-          ref={videoRef}
-          component="video"
-          autoPlay
-          muted
-          width="50vw"
-          height="50vh"
-        />
+        <Box ref={videoRef} component="video" autoPlay muted width="50vw" />
       </Box>
 
       <Typography>Result</Typography>
