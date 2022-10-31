@@ -5,7 +5,6 @@ import { theme } from "../../theme";
 import Image from "next/image";
 import movementImage from "../../../build/move.png";
 import uplightImage from "../../../build/uplight.png";
-import { useState, useEffect } from "react";
 
 export const Camera: React.FC = () => {
   const {
@@ -25,17 +24,22 @@ export const Camera: React.FC = () => {
       <Box
         sx={{
           display: "flex",
-          px: theme.spacing(2),
-          height: "80vh",
+          height: "90vh",
+          p: theme.spacing(2),
           backgroundColor: theme.palette.primary.main,
+          borderRadius: theme.spacing(2),
+          justifyContent: "space-around",
         }}
       >
         <Box
           sx={{
-            width: "50vw",
+            width: "50%",
+            height: "100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            borderRadius: theme.spacing(1),
+            backgroundColor: theme.palette.background.paper,
           }}
         >
           {!isRecording && (
@@ -54,7 +58,7 @@ export const Camera: React.FC = () => {
                 variant="h2"
                 sx={{ width: "100%", textAlign: "center" }}
               >
-                mainTimer：{time}
+                time:{time}
               </Typography>
               <Box
                 sx={{
@@ -72,9 +76,6 @@ export const Camera: React.FC = () => {
                 >
                   <Typography variant="h4">subTimer：{subTime.time}</Typography>
                 </Box>
-                <IconButton onClick={stopRecording}>
-                  <StopCircle sx={{ fontSize: "128px" }} />
-                </IconButton>
               </Box>
               <Box
                 sx={{
@@ -119,14 +120,30 @@ export const Camera: React.FC = () => {
             </Box>
           )}
         </Box>
-        <Box
-          ref={videoRef}
-          component="video"
-          autoPlay
-          muted
-          width="50vw"
-          sx={{ transform: "scaleX(-1)" }}
-        />
+
+        <Box sx={{ width: "48%" }}>
+          <Box
+            ref={videoRef}
+            component="video"
+            autoPlay
+            muted
+            width="100%"
+            sx={{ transform: "scaleX(-1)" }}
+          />
+          {isRecording && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <IconButton onClick={stopRecording}>
+                <StopCircle sx={{ fontSize: "128px" }} />
+              </IconButton>
+            </Box>
+          )}
+        </Box>
       </Box>
 
       <Typography>Result</Typography>
