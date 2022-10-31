@@ -15,6 +15,8 @@ export const Camera: React.FC = () => {
     videoRef,
     time,
     subTime,
+    mSecondSubTime,
+    mSecondTime,
   } = useRecording();
 
   return (
@@ -53,69 +55,77 @@ export const Camera: React.FC = () => {
             </Box>
           )}
           {isRecording && (
-            <Box sx={{ width: "100%" }}>
+            <Box sx={{ width: "100%", height: "100%" }}>
               <Typography
-                variant="h2"
-                sx={{ width: "100%", textAlign: "center" }}
-              >
-                time:{time}
-              </Typography>
-              <Box
+                variant="h1"
                 sx={{
-                  width: "80%",
-                  display: "flex",
-                  m: "0 auto",
+                  width: "100%",
+                  textAlign: "center",
+                  my: theme.spacing(4),
                 }}
               >
-                <Box
-                  sx={{
-                    width: "100%",
-                    textAlign: "start",
-                    my: theme.spacing(2),
-                  }}
-                >
-                  <Typography variant="h4">subTimer：{subTime.time}</Typography>
-                </Box>
-              </Box>
+                {time}:{mSecondTime}
+              </Typography>
+
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
                   width: "100%",
                 }}
               >
                 {subTime.isStoppingUser ? (
-                  <Box>
-                    <Image
-                      src={uplightImage.src}
-                      width={160}
-                      height={240}
-                      alt=""
-                    />
+                  <Box sx={{ width: "100%" }}>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        textAlign: "center",
+                      }}
+                    >
+                      <Image
+                        src={uplightImage.src}
+                        width={300}
+                        height={400}
+                        alt=""
+                      />
+                    </Box>
                     <Typography
-                      variant="h4"
-                      sx={{ textAlign: "center", my: theme.spacing(1) }}
+                      variant="h3"
+                      sx={{ textAlign: "center", my: theme.spacing(4) }}
                     >
                       Stop
                     </Typography>
                   </Box>
                 ) : (
-                  <Box>
-                    <Image
-                      src={movementImage.src}
-                      width={240}
-                      height={240}
-                      alt=""
-                    />
+                  <Box sx={{ width: "100%" }}>
+                    <Box sx={{ width: "100%", textAlign: "center" }}>
+                      <Image
+                        src={movementImage.src}
+                        width={400}
+                        height={400}
+                        alt=""
+                      />
+                    </Box>
                     <Typography
-                      variant="h4"
-                      sx={{ textAlign: "center", my: theme.spacing(1) }}
+                      variant="h3"
+                      sx={{ textAlign: "center", my: theme.spacing(4) }}
                     >
                       Move
                     </Typography>
                   </Box>
                 )}
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <Typography
+                    variant="h3"
+                    sx={{ textAlign: "center", my: theme.spacing(4) }}
+                  >
+                    {subTime.time}
+                  </Typography>
+                  <Typography
+                    variant="h3"
+                    sx={{ textAlign: "center", my: theme.spacing(4) }}
+                  >
+                    :{mSecondSubTime}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           )}

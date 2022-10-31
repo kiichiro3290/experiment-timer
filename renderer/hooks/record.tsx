@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
+type SubTime = {
+  time: number;
+  isStoppingUser: boolean;
+};
+
 export const useRecording = () => {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
   const [recordedDataSrc, setRecordedDataSrc] = useState<string>();
@@ -10,17 +15,17 @@ export const useRecording = () => {
 
   // タイマー用
   const [time, setTime] = useState<number>(0);
+  const [mSecondTime, setMSecondTime] = useState<number>(0);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
+  const [mSecondTimer, setMSecondTimer] = useState<NodeJS.Timeout>();
 
-  type SubTime = {
-    time: number;
-    isStoppingUser: boolean;
-  };
   const [subTime, setSubTime] = useState<SubTime>({
     time: 1,
     isStoppingUser: true,
   });
+  const [mSecondSubTime, setMSecondSubTime] = useState<number>(0);
   const [subTimer, setSubTimer] = useState<NodeJS.Timeout>();
+  const [mSecondSubTimer, setMSecondSubTimer] = useState<NodeJS.Timeout>();
 
   // videoタグへのRef
   const videoRef = useRef<HTMLMediaElement>(null);
@@ -54,10 +59,31 @@ export const useRecording = () => {
     };
 
     // タイマーをStart
+    setMSecondTime(99);
+    setTime(59);
     const timer = setInterval(() => {
-      setTime((t) => t + 1);
+      setTime((t) => {
+        if (t === 0) {
+          return 59;
+        } else {
+          return t - 1;
+        }
+      });
     }, 1000);
     setTimer(timer);
+
+    // msタイマー
+    const msTimer = setInterval(() => {
+      setMSecondTime((t) => {
+        if (t === 0) {
+          return 99;
+        } else {
+          return t - 1;
+        }
+      });
+    }, 10);
+    setMSecondTimer(msTimer);
+    setMSecondSubTime(99);
 
     // サブタイマーをStart
     const subTimer = setInterval(() => {
@@ -66,11 +92,11 @@ export const useRecording = () => {
           // ユーザの次の動作が何か
           if (val.isStoppingUser) {
             // Stop→Move
-            const newSubTime = { time: 2, isStoppingUser: false };
+            const newSubTime = { time: 1, isStoppingUser: false };
             return newSubTime;
           } else {
             // Move→Stop
-            const newSubTime = { time: 1, isStoppingUser: true };
+            const newSubTime = { time: 0, isStoppingUser: true };
             return newSubTime;
           }
         } else {
@@ -84,6 +110,18 @@ export const useRecording = () => {
       });
     }, 1000);
     setSubTimer(subTimer);
+
+    // msサブタイマー
+    const msSubTimer = setInterval(() => {
+      setMSecondSubTime((t) => {
+        if (t === 0) {
+          return 99;
+        } else {
+          return t - 1;
+        }
+      });
+    }, 10);
+    setMSecondSubTimer(msTimer);
   };
 
   // 録画の終了
@@ -102,6 +140,10 @@ export const useRecording = () => {
     clearInterval(subTimer);
     const resetSubTime = { time: 1, isStoppingUser: true };
     setSubTime(resetSubTime);
+    clearInterval(mSecondSubTimer);
+    clearInterval(mSecondTimer);
+    setMSecondSubTime(100);
+    setMSecondTime(100);
   };
 
   return {
@@ -112,5 +154,7 @@ export const useRecording = () => {
     videoRef,
     time,
     subTime,
+    mSecondSubTime,
+    mSecondTime,
   };
 };
