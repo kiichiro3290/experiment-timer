@@ -5,6 +5,7 @@ import { theme } from "../../theme";
 import Image from "next/image";
 import movementImage from "../../../build/move.png";
 import uplightImage from "../../../build/uplight.png";
+import { useState, useEffect } from "react";
 
 export const Camera: React.FC = () => {
   const {
@@ -13,7 +14,10 @@ export const Camera: React.FC = () => {
     isRecording,
     recordedDataSrc,
     videoRef,
+    time,
+    subTime,
   } = useRecording();
+
   return (
     <Box sx={{ p: theme.spacing(4) }}>
       <Typography variant="h4">ExperimentTimer</Typography>
@@ -38,19 +42,36 @@ export const Camera: React.FC = () => {
             </Box>
           )}
           {isRecording && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Image src={movementImage.src} width={240} height={240} alt="" />
-              <Image src={uplightImage.src} width={160} height={240} alt="" />
-              <IconButton onClick={stopRecording}>
-                <StopCircle sx={{ fontSize: "128px" }} />
-              </IconButton>
+            <Box>
+              <Typography variant="h4">{time}</Typography>
+              <Typography variant="h4">{subTime.time}</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
+                {subTime.isStoppingUser ? (
+                  <Image
+                    src={uplightImage.src}
+                    width={160}
+                    height={240}
+                    alt=""
+                  />
+                ) : (
+                  <Image
+                    src={movementImage.src}
+                    width={240}
+                    height={240}
+                    alt=""
+                  />
+                )}
+                <IconButton onClick={stopRecording}>
+                  <StopCircle sx={{ fontSize: "128px" }} />
+                </IconButton>
+              </Box>
             </Box>
           )}
         </Box>
