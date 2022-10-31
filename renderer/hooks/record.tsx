@@ -8,6 +8,7 @@ type SubTime = {
 export const useRecording = () => {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
   const [recordedDataSrc, setRecordedDataSrc] = useState<string>();
+  const [recordedData, setRecordedData] = useState<Blob>();
   const [isRecording, setIsRecording] = useState<boolean>(false);
 
   // カメラのトラッキングを終了→緑ランプも消える
@@ -55,7 +56,9 @@ export const useRecording = () => {
     // 録画のデータのsrcを保存
     mediaRecorder.ondataavailable = (e: BlobEvent) => {
       const src = URL.createObjectURL(e.data);
+      // このURLを破棄するときは URL.rebokeObjectURL
       setRecordedDataSrc(src);
+      setRecordedData(e.data);
     };
 
     // タイマーをStart
@@ -150,6 +153,7 @@ export const useRecording = () => {
     startRecording,
     stopRecording,
     recordedDataSrc,
+    recordedData,
     isRecording,
     videoRef,
     time,

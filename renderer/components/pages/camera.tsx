@@ -17,8 +17,17 @@ export const Camera: React.FC = () => {
     subTime,
     mSecondSubTime,
     mSecondTime,
+    recordedData,
   } = useRecording();
 
+  const downloadVideo = async (videoData: Blob) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const result = new Uint8Array(reader.result as ArrayBuffer);
+      await window.api.saveFile(result);
+    };
+    reader.readAsArrayBuffer(videoData);
+  };
   return (
     <Box sx={{ p: theme.spacing(4) }}>
       <Typography variant="h4">ExperimentTimer</Typography>
@@ -177,7 +186,13 @@ export const Camera: React.FC = () => {
           />
           <Box>
             <Typography>ファイルに保存</Typography>
-            <Button variant="contained">ダウンロード</Button>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={() => downloadVideo(recordedData)}
+            >
+              ダウンロード
+            </Button>
           </Box>
         </Box>
       )}
