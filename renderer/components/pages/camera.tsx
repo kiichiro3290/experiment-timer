@@ -22,7 +22,14 @@ export const Camera: React.FC = () => {
     <Box sx={{ p: theme.spacing(4) }}>
       <Typography variant="h4">ExperimentTimer</Typography>
 
-      <Box sx={{ display: "flex", px: theme.spacing(2), height: "80vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          px: theme.spacing(2),
+          height: "80vh",
+          backgroundColor: theme.palette.primary.main,
+        }}
+      >
         <Box
           sx={{
             width: "50vw",
@@ -36,15 +43,39 @@ export const Camera: React.FC = () => {
               <Typography variant="h4" textAlign="center">
                 Start
               </Typography>
-              <IconButton onClick={startRecording} color="primary">
+              <IconButton onClick={startRecording} color="secondary">
                 <PlayCircleFilledWhite sx={{ fontSize: "256px" }} />
               </IconButton>
             </Box>
           )}
           {isRecording && (
-            <Box>
-              <Typography variant="h4">{time}</Typography>
-              <Typography variant="h4">{subTime.time}</Typography>
+            <Box sx={{ width: "100%" }}>
+              <Typography
+                variant="h2"
+                sx={{ width: "100%", textAlign: "center" }}
+              >
+                mainTimer：{time}
+              </Typography>
+              <Box
+                sx={{
+                  width: "80%",
+                  display: "flex",
+                  m: "0 auto",
+                }}
+              >
+                <Box
+                  sx={{
+                    width: "100%",
+                    textAlign: "start",
+                    my: theme.spacing(2),
+                  }}
+                >
+                  <Typography variant="h4">subTimer：{subTime.time}</Typography>
+                </Box>
+                <IconButton onClick={stopRecording}>
+                  <StopCircle sx={{ fontSize: "128px" }} />
+                </IconButton>
+              </Box>
               <Box
                 sx={{
                   display: "flex",
@@ -54,23 +85,36 @@ export const Camera: React.FC = () => {
                 }}
               >
                 {subTime.isStoppingUser ? (
-                  <Image
-                    src={uplightImage.src}
-                    width={160}
-                    height={240}
-                    alt=""
-                  />
+                  <Box>
+                    <Image
+                      src={uplightImage.src}
+                      width={160}
+                      height={240}
+                      alt=""
+                    />
+                    <Typography
+                      variant="h4"
+                      sx={{ textAlign: "center", my: theme.spacing(1) }}
+                    >
+                      Stop
+                    </Typography>
+                  </Box>
                 ) : (
-                  <Image
-                    src={movementImage.src}
-                    width={240}
-                    height={240}
-                    alt=""
-                  />
+                  <Box>
+                    <Image
+                      src={movementImage.src}
+                      width={240}
+                      height={240}
+                      alt=""
+                    />
+                    <Typography
+                      variant="h4"
+                      sx={{ textAlign: "center", my: theme.spacing(1) }}
+                    >
+                      Move
+                    </Typography>
+                  </Box>
                 )}
-                <IconButton onClick={stopRecording}>
-                  <StopCircle sx={{ fontSize: "128px" }} />
-                </IconButton>
               </Box>
             </Box>
           )}
