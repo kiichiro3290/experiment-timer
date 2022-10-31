@@ -54,7 +54,14 @@ export const Camera: React.FC = () => {
             </Box>
           )}
         </Box>
-        <Box ref={videoRef} component="video" autoPlay muted width="50vw" />
+        <Box
+          ref={videoRef}
+          component="video"
+          autoPlay
+          muted
+          width="50vw"
+          sx={{ transform: "scaleX(-1)" }}
+        />
       </Box>
 
       <Typography>Result</Typography>
