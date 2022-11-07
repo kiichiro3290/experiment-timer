@@ -1,4 +1,12 @@
-import { Box, Typography, Button, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import { PlayCircleFilledWhite, StopCircle } from "@mui/icons-material";
 import { useRecording } from "../../hooks/record";
 import { theme } from "../../theme";
@@ -7,8 +15,13 @@ import Image from "next/image";
 import leftToRight from "../../../build/left-to-right.png";
 import rightToLeft from "../../../build/right-to-left.png";
 import uplightImage from "../../../build/uplight.png";
+import { useState } from "react";
+
+type MovementType = "leftToRight" | "rightToLeft";
 
 export const Camera: React.FC = () => {
+  const [movement, setMovement] = useState<MovementType>("leftToRight");
+  const [limitMin, setLimitMin] = useState<number>(1);
   const {
     startRecording,
     stopRecording,
@@ -22,7 +35,7 @@ export const Camera: React.FC = () => {
     startedAt,
     recordedData,
     minTime,
-  } = useRecording(1);
+  } = useRecording(limitMin);
 
   const downloadVideo = async (videoData: Blob, startedAt: Date) => {
     const reader = new FileReader();
@@ -32,6 +45,14 @@ export const Camera: React.FC = () => {
     };
     reader.readAsArrayBuffer(videoData);
   };
+
+  const handleMovementTypeChange = (event: SelectChangeEvent) => {
+    setMovement(event.target.value as MovementType);
+  };
+  const handleLimitMinChange = (event: SelectChangeEvent) => {
+    setLimitMin(Number(event.target.value));
+  };
+
   return (
     <Box sx={{ p: theme.spacing(4) }}>
       <Box
@@ -56,10 +77,19 @@ export const Camera: React.FC = () => {
           }}
         >
           {!isRecording && (
-            <Box>
-              <Typography variant="h4" textAlign="center">
-                Start
-              </Typography>
+            <Box sx={{ textAlign: "center" }}>
+              <Typography variant="h4">Start</Typography>
+              <Select
+                value={limitMin.toString()}
+                onChange={handleLimitMinChange}
+              >
+                <MenuItem value={1}>1min</MenuItem>
+                <MenuItem value={2}>2min</MenuItem>
+              </Select>
+              <Select value={movement} onChange={handleMovementTypeChange}>
+                <MenuItem value={"leftToRight"}>1.LeftToRight</MenuItem>
+                <MenuItem value={"rightToLeft"}>2.RightToLeft</MenuItem>
+              </Select>
               <IconButton onClick={startRecording} color="secondary">
                 <PlayCircleFilledWhite sx={{ fontSize: "256px" }} />
               </IconButton>
