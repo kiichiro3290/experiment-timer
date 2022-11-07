@@ -3,7 +3,9 @@ import { PlayCircleFilledWhite, StopCircle } from "@mui/icons-material";
 import { useRecording } from "../../hooks/record";
 import { theme } from "../../theme";
 import Image from "next/image";
-import movementImage from "../../../build/move.png";
+// import movementImage from "../../../build/move.png";
+import leftToRight from "../../../build/left-to-right.png";
+import rightToLeft from "../../../build/right-to-left.png";
 import uplightImage from "../../../build/uplight.png";
 
 export const Camera: React.FC = () => {
@@ -17,21 +19,21 @@ export const Camera: React.FC = () => {
     subTime,
     mSecondSubTime,
     mSecondTime,
+    startedAt,
     recordedData,
-  } = useRecording();
+    minTime,
+  } = useRecording(1);
 
-  const downloadVideo = async (videoData: Blob) => {
+  const downloadVideo = async (videoData: Blob, startedAt: Date) => {
     const reader = new FileReader();
     reader.onload = async () => {
       const result = new Uint8Array(reader.result as ArrayBuffer);
-      await window.api.saveFile(result);
+      await window.api.saveFile(result, startedAt);
     };
     reader.readAsArrayBuffer(videoData);
   };
   return (
     <Box sx={{ p: theme.spacing(4) }}>
-      <Typography variant="h4">ExperimentTimer</Typography>
-
       <Box
         sx={{
           display: "flex",
@@ -73,7 +75,7 @@ export const Camera: React.FC = () => {
                   my: theme.spacing(4),
                 }}
               >
-                {time}:{mSecondTime}
+                {minTime}：{time}:{mSecondTime}
               </Typography>
 
               <Box
@@ -107,7 +109,7 @@ export const Camera: React.FC = () => {
                   <Box sx={{ width: "100%" }}>
                     <Box sx={{ width: "100%", textAlign: "center" }}>
                       <Image
-                        src={movementImage.src}
+                        src={leftToRight.src}
                         width={400}
                         height={400}
                         alt=""
@@ -141,6 +143,12 @@ export const Camera: React.FC = () => {
         </Box>
 
         <Box sx={{ width: "48%" }}>
+          <Typography
+            variant="h4"
+            sx={{ textAlign: "center", mb: theme.spacing(2) }}
+          >
+            ExperimentTimer
+          </Typography>
           <Box
             ref={videoRef}
             component="video"
@@ -189,7 +197,7 @@ export const Camera: React.FC = () => {
             <Button
               color="secondary"
               variant="contained"
-              onClick={() => downloadVideo(recordedData)}
+              onClick={() => downloadVideo(recordedData, startedAt)}
             >
               ダウンロード
             </Button>
