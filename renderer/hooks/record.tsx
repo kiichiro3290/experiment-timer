@@ -18,7 +18,7 @@ export const useRecording = (limitMin: number) => {
   const [startedAt, setStartedAt] = useState<Date>();
 
   // タイマー用
-  const [minTime, setMinTime] = useState<number>(limitMin);
+  const [minTime, setMinTime] = useState<number>();
   const [time, setTime] = useState<number>(0);
   const [mSecondTime, setMSecondTime] = useState<number>(0);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
@@ -103,7 +103,7 @@ export const useRecording = (limitMin: number) => {
       });
     }, 60000);
     setMinTimer(minTimer);
-    setMinTime((t) => t - 1);
+    setMinTime(limitMin - 1);
 
     setMSecondTimer(msTimer);
     setMSecondSubTime(99);
@@ -166,7 +166,7 @@ export const useRecording = (limitMin: number) => {
     clearInterval(mSecondSubTimer);
     clearInterval(mSecondTimer);
     clearInterval(minTimer);
-    setMinTime(limitMin);
+    setMinTime(limitMin - 1);
     setMSecondSubTime(100);
     setMSecondTime(100);
   };
