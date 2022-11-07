@@ -19,6 +19,11 @@ import { useState } from "react";
 
 type MovementType = "leftToRight" | "rightToLeft";
 
+const movementImages = {
+  leftToRight: leftToRight.src,
+  rightToLeft: rightToLeft.src,
+};
+
 export const Camera: React.FC = () => {
   const [movement, setMovement] = useState<MovementType>("leftToRight");
   const [limitMin, setLimitMin] = useState<number>(1);
@@ -139,7 +144,7 @@ export const Camera: React.FC = () => {
                   <Box sx={{ width: "100%" }}>
                     <Box sx={{ width: "100%", textAlign: "center" }}>
                       <Image
-                        src={leftToRight.src}
+                        src={movementImages[movement]}
                         width={400}
                         height={400}
                         alt=""
