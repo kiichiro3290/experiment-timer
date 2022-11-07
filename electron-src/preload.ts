@@ -17,5 +17,6 @@ process.once("loaded", () => {
 });
 
 contextBridge.exposeInMainWorld("api", {
-  saveFile: async (data: any) => await ipcRenderer.invoke("save-file", data),
+  saveFile: async (data: any, startedAt: Date) =>
+    await ipcRenderer.invoke("save-file", data, startedAt),
 });
