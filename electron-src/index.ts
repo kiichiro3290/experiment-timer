@@ -43,13 +43,13 @@ app.on("window-all-closed", app.quit);
  * [IPC] 指定ファイルを保存する
  *
  */
-ipcMain.handle("save-file", async (event, data) => {
+ipcMain.handle("save-file", async (event, data, startedAt: Date) => {
   console.log(event);
   // 場所とファイル名を選択
   const filePath = dialog.showSaveDialogSync({
-    // ダイアログの初期表示フォルダ: "ドキュメント" or "書類"
-    defaultPath: app.getPath("documents"),
-    buttonLabel: "保存", // ボタンのラベル\
+    // ダイアログの初期表示フォルダ OR ファイル名
+    defaultPath: startedAt.toString(), // ファイル名を指定
+    buttonLabel: "保存", // ボタンのラベル
     filters: [
       {
         extensions: [".webm"],
