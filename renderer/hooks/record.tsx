@@ -5,7 +5,7 @@ type SubTime = {
   isStoppingUser: boolean;
 };
 
-export const useRecording = () => {
+export const useRecording = (limitMin: number) => {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
   const [recordedDataSrc, setRecordedDataSrc] = useState<string>();
   const [recordedData, setRecordedData] = useState<Blob>();
@@ -14,11 +14,16 @@ export const useRecording = () => {
   // カメラのトラッキングを終了→緑ランプも消える
   const [videoTracks, setVideoTracks] = useState<MediaStreamTrack[]>();
 
+  // 録画開始時間
+  const [startedAt, setStartedAt] = useState<Date>();
+
   // タイマー用
+  const [minTime, setMinTime] = useState<number>(limitMin);
   const [time, setTime] = useState<number>(0);
   const [mSecondTime, setMSecondTime] = useState<number>(0);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const [mSecondTimer, setMSecondTimer] = useState<NodeJS.Timeout>();
+  const [minTimer, setMinTimer] = useState<NodeJS.Timeout>();
 
   const [subTime, setSubTime] = useState<SubTime>({
     time: 1,
@@ -52,6 +57,7 @@ export const useRecording = () => {
   const startRecording = () => {
     mediaRecorder.start();
     setIsRecording(true);
+    setStartedAt(new Date());
 
     // 録画のデータのsrcを保存
     mediaRecorder.ondataavailable = (e: BlobEvent) => {
@@ -85,6 +91,20 @@ export const useRecording = () => {
         }
       });
     }, 10);
+
+    // minuteタイマー
+    const minTimer = setInterval(() => {
+      setMinTime((t) => {
+        if (t === 0) {
+          stopRecording();
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 60000);
+    setMinTimer(minTimer);
+    setMinTime((t) => t - 1);
+
     setMSecondTimer(msTimer);
     setMSecondSubTime(99);
 
@@ -145,6 +165,8 @@ export const useRecording = () => {
     setSubTime(resetSubTime);
     clearInterval(mSecondSubTimer);
     clearInterval(mSecondTimer);
+    clearInterval(minTimer);
+    setMinTime(limitMin);
     setMSecondSubTime(100);
     setMSecondTime(100);
   };
@@ -160,5 +182,7 @@ export const useRecording = () => {
     subTime,
     mSecondSubTime,
     mSecondTime,
+    minTime,
+    startedAt,
   };
 };
